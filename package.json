@@ -1,0 +1,19 @@
+{
+  "name": "maximo",
+  "version": "1.0.0",
+  "description": "A high level API to access Maximo RESTservices",
+  "main": "maximofactory.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sachin Balagopalan, IBM",
+  "license": "IBM Copyright",
+  "dependencies": {
+    "buffer": "^3.1.2",
+    "http": "0.0.0",
+    "install": "^0.1.8",
+    "npm": "^2.13.5",
+    "q": "^1.2.0",
+    "url": "^0.10.3"
+  }
+}

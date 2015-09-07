@@ -10,7 +10,7 @@ logic.
 
 Assumes [Node](https://nodejs.org/en/) and [Express](http://expressjs.com/) are installed.
 
-$ npm install --save maximo
+$ npm install --save ibm-maximo-api
 
 ## Usage
 
@@ -23,7 +23,7 @@ There are three main components ....
 Like any other Node.js module the "maximo" module has to be loaded and assigned a local reference in your code. The easiest
 way to do this is using the built-in require() function.
 
-    var Maximo = require('maximo');
+    var Maximo = require('ibm-maximo-api');
 
 The require() function returns a prototype (class) and assigns it to the local variable Maximo in the example above. 
 
