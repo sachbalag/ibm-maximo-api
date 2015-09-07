@@ -9,7 +9,7 @@ var Q = require('q');
 var ResourceSet = require('./resourceset');
 var Attachment = require('./attachment');
 var CRUDConnector = require('./connectors/crudconnector');
-var twilio = require('twilio');
+//var twilio = require('twilio');
 
 /**
  * Business object for Maximo OSLC API
@@ -67,7 +67,7 @@ Resource.prototype.attachment = function(meta,datacallback)
 	return new Attachment(this.member,meta,this.connection);
 };
 
-Resource.prototype.twilio_message = function(res)
+/*Resource.prototype.twilio_message = function(res)
 {
   var client = new twilio.RestClient('ACdf313fd7f66eb3674000e60dca2b2672', 'e4b02903fad59b943423fdb1a43007ee');
 
@@ -91,7 +91,7 @@ Resource.prototype.twilio_message = function(res)
            res.send(errmsg);
         }
     });
-};
+};*/
 
 Resource.prototype.update = function(jsonbody,props,datacallback)
 {
