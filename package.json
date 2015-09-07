@@ -1,13 +1,28 @@
 {
-  "name": "maximo",
-  "version": "1.0.0",
-  "description": "A high level API to access Maximo RESTservices",
+  "name": "ibm-maximo-api",
+  "version": "1.0.2",
+  "description": "A high level API to access Maximo REST services",
+  "repository": {
+      "type": "git",
+      "url": "sachbalag/ibm-maximo-api.git"
+  },
   "main": "maximofactory.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sachin Balagopalan, IBM",
-  "license": "IBM Copyright",
+  "license": "MIT",
+    "author": {
+      "name": "Sachin Balagopalan",
+      "email": "sachin.balagopalan@us.ibm.com"
+    },
+    "keywords": [
+        "ibm-maximo-api",
+        "ibm",
+        "cloud",
+        "bluemix",
+        "api"
+  ],
   "dependencies": {
     "buffer": "^3.1.2",
     "http": "0.0.0",
