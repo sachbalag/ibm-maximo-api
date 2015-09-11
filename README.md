@@ -52,7 +52,7 @@ The constructor accepts two parameters:
 It is up to the user to decide how to set up the options parameter containing information about Maximo's connectivity. 
 Since some of the values - like user and password - may need to be secure it is not recommended to hard code the values as illustrated above. Depending on the use case the user may decide to read the values from a secure configuration file or from a database. 
 
-Along with user and password the authentication type (authtype) is also required. This API supports basic and form based
+Along with user and password the authentication type (authtype) is also required. This API supports BASIC and FORM based
 authentication in addition to MAXAUTH which is Maximo's authentication scheme.
 
 In the example below we are reading some of the values from the request headers (presumably set by the UI).
