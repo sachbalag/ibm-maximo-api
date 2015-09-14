@@ -14,10 +14,6 @@ $ npm install --save ibm-maximo-api
 
 ## Usage
 
-There are three main components ....
-
-
-
 #### Requiring Maximo
 
 Like any other Node.js module the "maximo" module has to be loaded and assigned a local reference in your code. The easiest
@@ -28,7 +24,7 @@ way to do this is using the built-in require() function.
 The require() function returns a prototype (class) and assigns it to the local variable Maximo in the example above. 
 
 
-#### Constructor and Authentication
+#### Authentication and Authorization
 
 After a local reference has been assigned using the require() function you can easily instantiate an object like this:
 
@@ -52,6 +48,24 @@ The constructor accepts two parameters:
     authcookie: This parameter is OPTIONAL.
                 If this parameter is null the Create, Read, Update and Delete (CRUD) api's will attempt to 
                 authenticate with Maximo everytime a CRUD operation is invoked.
+
+It is up to the user to decide how to set up the options parameter containing information about Maximo's connectivity. 
+Since some of the values - like user and password - may need to be secure it is not recommended to hard code the values as illustrated above. Depending on the use case the user may decide to read the values from a secure configuration file or from a database. 
+
+Along with user and password the authentication type (authtype) is also required. This API supports BASIC and FORM based
+authentication in addition to MAXAUTH which is Maximo's authentication scheme.
+
+In the example below we are reading some of the values from the request headers (presumably set by the UI).
+
+      var options = {
+          protocol: req.headers["x-protocol"],
+          hostname: req.headers["x-host"],
+          port: req.headers["x-port"],
+          user: req.headers["x-user"],
+          password: req.headers["x-password"],
+          auth_scheme: req.headers["x-auth-scheme"],
+          authtype: req.headers["x-authtype"]
+      };
 
 If CRUD's are invoked multiple times it is recommended to authenticate first via the authenticate() function. If the 
 authentication is sucessful a token(jsessionID) will be returned. Save the token in the request session so it can be
