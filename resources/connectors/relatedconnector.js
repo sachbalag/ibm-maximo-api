@@ -1,5 +1,5 @@
 'use strict';
-module.exports = FetchConnector;
+module.exports = RelatedConnector;
 var url = require('url');
 var buffer = require('buffer');
 var http   = require('http');
@@ -21,36 +21,52 @@ var ResourceSet = require('../resourceset');
  */
 
 
-function FetchConnector(maximoRestUrl,maximopath)
+function RelatedConnector(maximoRestUrl,maximopath)
 {
-	this.maximoRestUrl = maximoRestUrl;
-	this.client = require(this.maximoRestUrl.protocol.split(':')[0]);
-	this.xpublicuri = this.maximoRestUrl.protocol+"//"+this.maximoRestUrl.hostname+":"+this.maximoRestUrl.port+X_PUB_PATH;
- 	this.maximopath = maximopath;
- 	this.cookie = null;
+	if(maximoRestUrl)
+	{
+		this.maximoRestUrl = maximoRestUrl;
+		if(typeof(this.maximoRestUrl) === "string")
+		{
+			var urlarray = this.maximoRestUrl.split(':');
+			var port = urlarray[2].split("/")[0];
+			this.client = require(urlarray[0]);
+			this.xpublicuri = urlarray[0]+":"+urlarray[1]+":"+port+X_PUB_PATH;
+			console.log("***** this.xpublicuri "+this.xpublicuri)
+		} else
+		{
+			this.client = require(this.maximoRestUrl.protocol.split(':')[0]);
+			this.xpublicuri = this.maximoRestUrl.protocol+"//"+this.maximoRestUrl.hostname+":"+this.maximoRestUrl.port+X_PUB_PATH;
+		}
+	}
+ 	this.maximopath = maximopath? maximopath : null;
+ 	this.connection = maximoRestUrl; // this.connection is exposed and may be overridden later.
  	this.isCookieSet = "false";
 
 };
 
 // Expose these properties
-FetchConnector.prototype.cookie;
+RelatedConnector.prototype.cookie;
 
-FetchConnector.prototype.isCookieSet;
+RelatedConnector.prototype.isCookieSet;
 
 
-FetchConnector.prototype.__fetch = function(myconnector,datacallback)
+RelatedConnector.prototype.__fetch = function(current,myconnector,datacallback)
 {
 	var deferred = Q.defer();
 	var returndata = '';
 	//var client = require(this.maximoRestUrl.protocol.split(':')[0]);
 	var statusCode = "";
 	var resourceset = "";
-	console.log(this.maximopath);
+	var host = current.resourceURI.split(':')[1].split("//")[1];
+	var port = current.resourceURI.split(':')[2].split("/")[0];
+	var path = current.resourceURI.split(host)[1].split(port)[1];
+	this.connection = current.connection;
 	var options = {
-        hostname: this.maximoRestUrl.hostname,
-        port: this.maximoRestUrl.port,
+        hostname: host,
+        port: port,
         headers: getAuthTypeHeader(this,myconnector),
-        path: this.maximopath
+        path: path
     };
 	var ac = this.cookie;  // make a local copy so it's in context for the callback
   var restcallback = function(response)
@@ -97,7 +113,7 @@ FetchConnector.prototype.__fetch = function(myconnector,datacallback)
 
 
 
-FetchConnector.prototype.__fetchnext = function(np,myconnector,datacallback)
+RelatedConnector.prototype.__fetchnext = function(np,myconnector,datacallback)
 {
 	var deferred = Q.defer();
 
@@ -172,7 +188,7 @@ FetchConnector.prototype.__fetchnext = function(np,myconnector,datacallback)
 function getAuthTypeHeader(my,fconnect)
 {
 	var hdr = "";
-	if(my.cookie == null)
+	if(my.connection == null)
 	{
 		console.log("Auth header type = "+fconnect.authType);
 		switch (fconnect.authType)
@@ -200,8 +216,8 @@ function getAuthTypeHeader(my,fconnect)
 		}
 	} else
 	{
-		console.log("Auth header type = cookie"+my.cookie);
-		hdr = {'Cookie' : my.cookie};
+		console.log("Auth header type = cookie"+my.connection);
+		hdr = {'Cookie' : my.connection};
 	}
 	return hdr;
 }

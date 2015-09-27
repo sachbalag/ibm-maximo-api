@@ -9,7 +9,7 @@ var Q = require('q');
 var ResourceSet = require('./resourceset');
 var Attachment = require('./attachment');
 var CRUDConnector = require('./connectors/crudconnector');
-//var twilio = require('twilio');
+var RelatedConnector = require('./connectors/relatedconnector');
 
 /**
  * Business object for Maximo OSLC API
@@ -24,9 +24,7 @@ function Resource(member,connection)
  	this.member = member;
  	//this.currentResourceSet = collection["rdfs:member"];
  	this.resourceURI = (typeof(member)==="object")? getMyResourceURI(this.member) : member;
- 	//this.currentResourceSet = (typeof(collection["rdfs:member"]) == "undefined") ? collection: collection["rdfs:member"];
- 	console.log("connection type "+typeof(connection));
- 	console.log("connection "+connection);
+  //this.currentResourceSet = (typeof(collection["rdfs:member"]) == "undefined") ? collection: collection["rdfs:member"];
  	this.isCookieSet = false;
  	//fyi... if this.isCookieSet = true (set by the client) then the connection will be a cookie
  	//       otherwise it's a URL
@@ -67,37 +65,18 @@ Resource.prototype.attachment = function(meta,datacallback)
 	return new Attachment(this.member,meta,this.connection);
 };
 
-/*Resource.prototype.twilio_message = function(res)
-{
-  var client = new twilio.RestClient('ACdf313fd7f66eb3674000e60dca2b2672', 'e4b02903fad59b943423fdb1a43007ee');
 
-    var toadd = '+1 508-577-3979';
-    var msgbody = "This is a message from the Maximo Bluemix API - Your Tesla Model S is at a 50% charge state " +
-     "with the battery level state at 50%  " +
-     "and an estimate range of 120 miles"
-    client.sendMessage({
-        to:toadd,
-        from:'+1 508-232-4376',
-        body:msgbody
-    }, function(err, message)
-    {
-        console.log(JSON.stringify(message));
-        if(err == null)
-        {
-          res.send('Message sent! ID: '+message.sid);
-        } else
-        {
-           var errmsg = "Status: "+err.status+" Message: "+err.message+" Code: "+err.code+" More Info: "+err.moreInfo;
-           res.send(errmsg);
-        }
-    });
-};*/
 
 Resource.prototype.update = function(jsonbody,props,datacallback)
 {
 	return getCRUDConnector(this).__crud(jsonbody,props,this,'POST','PATCH','MERGE',datacallback);
 	//return crud(jsonbody,props,this,'POST',null,datacallback);
 };
+
+Resource.prototype.fetch = function(datacallback)
+{
+	return getRelatedConnector(this).__fetch(this,this.fconnect); // Pass this.fconnect so it's state is updated.
+}
 
 Resource.prototype.merge = function(jsonbody,props,datacallback)
 {
@@ -134,8 +113,19 @@ function getCRUDConnector(me)  // Singleton
 		me.cconnect = new CRUDConnector(me.resourceURI, me.maximopath);
 		me.cconnect.authType = me.authType;
 		me.cconnect.cookie = me.cookie;
-		console.log("^^^%^%^^%^%^ me.cookie "+me.cookie);
 		me.cconnect.isCookieSet = me.cookie == null ? false : true;
 	}
 	return me.cconnect;
+}
+
+function getRelatedConnector(cur)  // Singleton
+{
+	if(cur.fconnect == null)
+	{
+		cur.fconnect = new RelatedConnector(cur.resourceURI, cur.maximopath);
+		cur.fconnect.authType = cur.authType;
+		cur.fconnect.cookie = cur.cookie;
+		cur.fconnect.isCookieSet = cur.cookie == null ? false : true;
+	}
+	return cur.fconnect;
 }

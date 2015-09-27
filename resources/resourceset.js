@@ -12,6 +12,7 @@ var REST_PATH = '/maximo/oslc/os/';
 var Resource = require('./resource');
 var FetchConnector = require('./connectors/fetchconnector');
 var CRUDConnector = require('./connectors/crudconnector');
+var ExternalConnector = require('./connectors/externalconnector');
 
 /**
  * Business object for Maximo OSLC API
@@ -66,7 +67,7 @@ ResourceSet.prototype.fconnect;
 //* Returns the rdfs member only
 ResourceSet.prototype.thisResourceSet = function()
 {
-    return this.resourcemboset["rdfs:member"];
+    return this.resourcemboset["member"];
 };
 
 //* Returns the complete JSON i.e all top level OR sets this set and returns the new set.
@@ -302,6 +303,11 @@ ResourceSet.prototype.invoke = function(resource,datacallback)
 	req.end();
   //return this;*/
   return deferred.promise;
+}
+
+ResourceSet.prototype.externalConnector = function(ops)
+{
+	return new ExternalConnector(ops,this.resourcemboset["member"]);
 }
 
 
