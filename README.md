@@ -1,5 +1,7 @@
 # IBM-Maximo-API
 
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=<git_repository_URL> # [required])
+
 ## Introduction
 
 This module includes a set of fluent API's for interfacing with Maximo by providing a high level abstraction for the
