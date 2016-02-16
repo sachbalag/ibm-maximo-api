@@ -45,6 +45,8 @@ function MaximoFactory(options,cookie,callback)
 
  	this.resturl = url.parse(this.protocol+"://"+this.user+":"+this.password+"@"+this.hostname+":"+this.port);
 
+ 	this.resturl.auth_scheme = this.auth_scheme;
+
  	if(callback != null)
  	{
 		if(this.hostname === "" || this.user === "" || this.password === "")

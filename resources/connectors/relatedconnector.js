@@ -25,6 +25,8 @@ function RelatedConnector(maximoRestUrl,maximopath)
 {
 	if(maximoRestUrl)
 	{
+		X_PUB_PATH = maximoRestUrl.auth_scheme + '/oslc/';
+		
 		this.maximoRestUrl = maximoRestUrl;
 		if(typeof(this.maximoRestUrl) === "string")
 		{
