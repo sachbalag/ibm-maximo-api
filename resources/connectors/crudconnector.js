@@ -77,7 +77,7 @@ CRUDConnector.prototype.__create = function(jsonbody,props,attachments,datacallb
 	var options = {
         hostname: this.maximoRestUrl.hostname,
         port: this.maximoRestUrl.port,
-        headers: getAuthTypeHeader(props,jsonbody,this),
+        headers: getAuthTypeHeader(props,jsonbody,this, null, null),
         path: this.maximopath,
         method: 'POST'
     	};
