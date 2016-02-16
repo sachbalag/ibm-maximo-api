@@ -20,6 +20,9 @@ var AUTH_PATH = '/maximo/oslc/';
 
 function AuthConnector(maximoRestUrl,maximopath)
 {
+	X_PUB_PATH = maximoRestUrl.auth_scheme + '/oslc/';
+	AUTH_PATH = X_PUB_PATH;
+
 	this.maximoRestUrl = maximoRestUrl;
 	this.client = require(this.maximoRestUrl.protocol.split(':')[0]);
 	this.xpublicuri = this.maximoRestUrl.protocol+"//"+this.maximoRestUrl.hostname+":"+this.maximoRestUrl.port+X_PUB_PATH;
