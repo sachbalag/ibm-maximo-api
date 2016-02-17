@@ -39,6 +39,9 @@ function ResourceSet(resourcemboset,cookie,maxfactory,mbo)
  	// Constructor 2
  	if(maxfactory != "undefined" && mbo != "undefined")
  	{
+		X_PUB_PATH = maxfactory.auth_scheme + '/oslc/';
+		REST_PATH = X_PUB_PATH + '/os/';
+
 	 	this.maximoRestUrl = maxfactory.resturl;
 	 	this.password = maxfactory.password;
 	 	this.mbo = mbo;
@@ -56,6 +59,7 @@ function ResourceSet(resourcemboset,cookie,maxfactory,mbo)
 			this.fconnect.authType = this.authType;
 			this.fconnect.authenticate(this.fconnect);
 	 	}
+	 	
 	 	return this;
 	}
 };
