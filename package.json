@@ -1,6 +1,6 @@
 {
   "name": "ibm-maximo-api",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A high level API to access Maximo REST services",
   "repository": {
     "type": "git",
