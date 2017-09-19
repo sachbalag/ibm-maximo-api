@@ -207,6 +207,17 @@ ResourceSet.prototype.equal = function(eq)
 	return this;
 }
 
+ResourceSet.prototype.notnull = function(eq)
+{
+	if(this.where != null && this.where != "")
+	{
+		var eq = '*';
+		eq = (typeof(eq) === "string") ? '"'+eq+'"' : eq;
+		this.maximopath = this.maximopath+"="+encodeURIComponent(eq);
+	}
+	return this;
+}
+
 ResourceSet.prototype.orderby = function(oby,direction)
 {
 	if(this.where != null && this.where != "")
