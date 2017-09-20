@@ -13,6 +13,7 @@ var Resource = require('./resource');
 var FetchConnector = require('./connectors/fetchconnector');
 var CRUDConnector = require('./connectors/crudconnector');
 var ExternalConnector = require('./connectors/externalconnector');
+var SchemaConnector = require('./connectors/schemaconnector');
 
 /**
  * Business object for Maximo OSLC API
@@ -35,7 +36,6 @@ function ResourceSet(resourcemboset,cookie,maxfactory,mbo)
 	 	this.resourcemboset = resourcemboset;
 	 	return this;
 	}
-
  	// Constructor 2
  	if(maxfactory != "undefined" && mbo != "undefined")
  	{
@@ -51,6 +51,7 @@ function ResourceSet(resourcemboset,cookie,maxfactory,mbo)
 	 	this.tenantcode = maxfactory.tenantcode;
 	 	this.maximopath = REST_PATH+this.mbo+"?lean="+this.islean;
 	 	this.maximopath = this.tenantcode ? this.maximopath+"&_tenantcode="+this.tenantcode : this.maximopath;
+	 	this.schemapath = X_PUB_PATH + 'jsonschemas/'
 	 	this.nextpageurl = "";
 	 	this.authType = maxfactory.authType
 	 	if(this.authType == "form")
@@ -59,7 +60,7 @@ function ResourceSet(resourcemboset,cookie,maxfactory,mbo)
 			this.fconnect.authType = this.authType;
 			this.fconnect.authenticate(this.fconnect);
 	 	}
-	 	
+
 	 	return this;
 	}
 };
@@ -89,6 +90,17 @@ ResourceSet.prototype.JSON = function(resourcemboset)
 ResourceSet.prototype.fetch = function(datacallback)
 {
 	return getFetchConnector(this).__fetch(this.fconnect); // Pass this.fconnect so the it's state is updated.
+}
+
+
+ResourceSet.prototype.schema = function(datacallback)
+{
+	return getSchemaConnector(this).__fetch(this.sconnect); // Pass this.sconnect so the it's state is updated.
+}
+
+ResourceSet.prototype.schemarelated = function(datacallback)
+{
+	return getSchemaRelatedConnector(this).__fetch(this.sconnect); // Pass this.sconnect so the it's state is updated.
 }
 
 
@@ -413,6 +425,30 @@ function getFetchConnector(me)  // Singleton
 		me.fconnect.isCookieSet = me.cookie == null ? false : true;
 	}
 	return me.fconnect;
+}
+
+function getSchemaConnector(me)  // Singleton
+{
+	if(me.sconnect == null)
+	{
+		me.sconnect = new SchemaConnector(me.maximoRestUrl, me.schemapath+me.mbo);
+		me.sconnect.authType = me.authType;
+		me.sconnect.cookie = me.cookie;
+		me.sconnect.isCookieSet = me.cookie == null ? false : true;
+	}
+	return me.sconnect;
+}
+
+function getSchemaRelatedConnector(me)  // Singleton
+{
+	if(me.sconnect == null)
+	{
+		me.sconnect = new SchemaConnector(me.maximoRestUrl, me.schemapath+me.mbo+"?oslc.select=*");
+		me.sconnect.authType = me.authType;
+		me.sconnect.cookie = me.cookie;
+		me.sconnect.isCookieSet = me.cookie == null ? false : true;
+	}
+	return me.sconnect;
 }
 
 function getCRUDConnector(me)  // Singleton
