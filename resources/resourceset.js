@@ -150,13 +150,13 @@ ResourceSet.prototype.select = function(selects)
 		for (var i = 0; i < arrayLength; i++) {
 			var wh = selects[i];
 			wh = (wh.indexOf(":") < 1) ? this.namespace+wh : wh  //prepend the name spaces
-			if(wh.indexOf(".") > 1) // check if this attribute is a relationship and construct expression
+			/*if(wh.indexOf(".") > 1) // check if this attribute is a relationship and construct expression
 			{
 				var wharray = wh.split(".");
 				//wh = wharray[0]+"{"+this.namespace+wharray[1]+"}";
 
 				relatedset(wharray[0],this.namespace+wharray[1],relationships);
-			}
+			}*/
 		    selectStr = ((arrayLength - i) > 1) ? selectStr+wh+"," : selectStr+wh;
 		}
 	 }
